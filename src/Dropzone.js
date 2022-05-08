@@ -4,7 +4,7 @@ import styles from './DragnDrop.module.css';
 
 export default function Dropzone() {
     const [files, setFiles] = useState([]);
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: 'image/*',
         onDrop: (acceptedFiles) => {
             setFiles(
@@ -23,11 +23,21 @@ export default function Dropzone() {
         </div>
     ));
 
+    const file = acceptedFiles.map(file => (
+        <p key={file.path}>
+            {file.path}
+        </p>
+    ));
+
     return (
         <section className={styles.container}>
             <div {...getRootProps({ className: 'dropzone' })} className={styles.fileBox}>
                 <input {...getInputProps()} />
-                <p className={styles.text}>Drag 'n' drop image here, or click to select images</p>
+                {/* <p className={styles.text}>Drag 'n' drop image here, or click to select images</p> */}
+                {
+                    files < 1 ? <p>Drag 'n' drop some files here, or click to select files</p> : <p>{file}</p>
+
+                }
             </div>
             <aside>
                 <h4>Preview</h4>
