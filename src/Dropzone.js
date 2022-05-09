@@ -4,6 +4,7 @@ import styles from './DragnDrop.module.css';
 
 export default function Dropzone() {
     const [files, setFiles] = useState([]);
+    const [text, setText] = useState('Drag & drop image here, or click to select images');
     const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: 'image/*',
         onDrop: (acceptedFiles) => {
@@ -15,6 +16,15 @@ export default function Dropzone() {
                 ),
             );
         },
+        onDragEnter: (event) => {
+            setText("Drop here");
+            if (!event.dataTransfer.items[0].type.match("image/")) {
+                setText("Wrong file type");
+            }
+        },
+        onDragLeave: (event) => {
+            setText('Drag & drop image here, or click to select images')
+        }
     });
 
     const images = files.map((file) => (
@@ -35,8 +45,7 @@ export default function Dropzone() {
                 <input {...getInputProps()} />
                 {/* <p className={styles.text}>Drag 'n' drop image here, or click to select images</p> */}
                 {
-                    files < 1 ? <p>Drag 'n' drop some files here, or click to select files</p> : <p>{file}</p>
-
+                    file < 1 ? <p>{text}</p> : <p>{file}</p>
                 }
             </div>
             <aside>
